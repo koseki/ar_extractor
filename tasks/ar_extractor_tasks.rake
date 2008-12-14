@@ -6,9 +6,11 @@ def fixture_entry(table_name, obj)
     name = column.name
     value = obj[column.name]
 
-		# How about CR or CR+LF?
+    # How about CR or CR+LF?
     if value.is_a? String and value =~ /\n/
       res << "  #{name}: |\n    " + value.split("\n").join("\n    ")
+    elsif value.is_a? String and value.empty?
+      res << "  #{name}: \"\""
     else
       res << "  #{name}: #{value}"
     end

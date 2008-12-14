@@ -38,10 +38,14 @@ namespace :db do
  
       table_names.each do |table_name|
         File.open("#{fixtures_dir}#{table_name}.yml", "w") do |file|
-          begin
-            objects  = ActiveRecord::Base.connection.select_all(sql % table_name)
-          rescue
-            objects  = ActiveRecord::Base.connection.select_all(sql_no_id % table_name)
+          if ENV["SQL"]
+            objects = ActiveRecord::Base.connection.select_all(ENV["SQL"] % table_name) 
+          else
+            begin
+              objects  = ActiveRecord::Base.connection.select_all(sql % table_name)
+            rescue
+              objects  = ActiveRecord::Base.connection.select_all(sql_no_id % table_name)
+            end
           end
           objects.each do |obj|
             file.write fixture_entry(table_name, obj) + "\n\n"

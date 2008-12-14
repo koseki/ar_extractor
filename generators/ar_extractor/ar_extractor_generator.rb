@@ -1,4 +1,7 @@
 class ArExtractorGenerator < Rails::Generator::NamedBase
+  
+  SKIP_TABLES = ["schema_info", "schema_migrations"] 
+  
   def initialize(runtime_args, runtime_options = {})
     runtime_args = ["ar"]
     super

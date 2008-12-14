@@ -33,7 +33,9 @@ namespace :db do
       if ENV["FIXTURES"]
         table_names = ENV["FIXTURES"].split(/,/)
       else
-        table_names = (ActiveRecord::Base.connection.tables - Rails::Plugin::SKIP_TABLES)
+        skip_tables = ["schema_info", "schema_migrations"] 
+        skip_tables += ENV["EXCLUDE"].split(/,/) if ENV["EXCLUDE"]
+        table_names = (ActiveRecord::Base.connection.tables - skip_tables)
       end
  
       table_names.each do |table_name|
